@@ -1,0 +1,35 @@
+From: Shengjing Zhu <zhsj@debian.org>
+Date: Mon, 5 Oct 2020 13:17:45 +0800
+Subject: Fix test with go1.15
+
+---
+ api/api_test.go            | 2 +-
+ circonus-gometrics_test.go | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/api/api_test.go b/api/api_test.go
+index 8cd418d..4628654 100644
+--- a/api/api_test.go
++++ b/api/api_test.go
+@@ -169,7 +169,7 @@ func TestNew(t *testing.T) {
+ 
+ 	t.Log("API Token, API App, API URL [invalid]")
+ 	{
+-		expectedError := errors.New("parse http://something.somewhere.com\\somepath$: invalid character \"\\\\\" in host name")
++		expectedError := errors.New("parse \"http://something.somewhere.com\\\\somepath$\": invalid character \"\\\\\" in host name")
+ 		ac := &Config{
+ 			TokenKey: "abc123",
+ 			TokenApp: "someapp",
+diff --git a/circonus-gometrics_test.go b/circonus-gometrics_test.go
+index 1ad95d4..3a43234 100644
+--- a/circonus-gometrics_test.go
++++ b/circonus-gometrics_test.go
+@@ -135,7 +135,7 @@ func TestNew(t *testing.T) {
+ 		cfg := &Config{
+ 			Interval: "thirty seconds",
+ 		}
+-		expectedError := errors.New("parsing flush interval: time: invalid duration thirty seconds")
++		expectedError := errors.New("parsing flush interval: time: invalid duration \"thirty seconds\"")
+ 		_, err := New(cfg)
+ 		if err == nil {
+ 			t.Fatal("expected error")
